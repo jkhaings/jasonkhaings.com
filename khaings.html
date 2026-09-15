@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Khaings International PdM pilot | Swan Yae Htet</title>
+<meta name="description" content="Case study: a managed predictive-maintenance service for BC plants. Sensors, analytics, and why I shut it down.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="topline-row">
+      <p class="topline">JASON KHAINGS / CASE STUDY 02 / PDM PILOT / REV 2026-09</p>
+      <p class="topline-nav"><a href="index.html">&#8592; INDEX</a></p>
+    </div>
+    <div class="case-head">
+      <h1 class="page-title">Khaings International PdM pilot</h1>
+      <p class="page-meta">APR 2026 &ndash; JUL 2026 &middot; SOLE ENGINEER &middot; STATUS: <span class="status">SHUT DOWN</span> &middot; COMPANY: <a class="meta-link" href="https://khaingsinternational.com">khaingsinternational.com</a></p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">What It Was</h2>
+    </div>
+    <p>A managed predictive-maintenance service for BC plants.</p>
+    <p>Wireless vibration sensors on their machines, monitoring and alerts handled by me.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">How It Worked</h2>
+    </div>
+    <p>NCD Gen4 wireless vibration sensors reported to a gateway. Node-RED and FlowFuse ran the flows, InfluxDB held the time series, and a FastAPI sidecar did the analytics.</p>
+
+    <figure class="figure">
+      <div class="figure-scroll">
+        <svg class="figure-svg" viewBox="0 0 1240 180" role="img" aria-label="Topology diagram. NCD Gen4 wireless sensors report to a gateway, which feeds Node-RED and FlowFuse flows, which write to InfluxDB time series, which a FastAPI analytics sidecar reads.">
+          <rect class="dgm-box" x="10" y="50" width="210" height="62"></rect>
+          <text class="dgm-t" x="115" y="78" text-anchor="middle">NCD GEN4</text>
+          <text class="dgm-s" x="115" y="97" text-anchor="middle">WIRELESS SENSORS</text>
+
+          <line class="dgm-line" x1="220" y1="81" x2="251" y2="81"></line>
+          <polygon class="dgm-head" points="251,76.5 260,81 251,85.5"></polygon>
+
+          <rect class="dgm-box" x="260" y="50" width="210" height="62"></rect>
+          <text class="dgm-t" x="365" y="88" text-anchor="middle">GATEWAY</text>
+
+          <line class="dgm-line" x1="470" y1="81" x2="501" y2="81"></line>
+          <polygon class="dgm-head" points="501,76.5 510,81 501,85.5"></polygon>
+
+          <rect class="dgm-box" x="510" y="50" width="210" height="62"></rect>
+          <text class="dgm-t" x="615" y="78" text-anchor="middle">NODE-RED</text>
+          <text class="dgm-s" x="615" y="97" text-anchor="middle">FLOWFUSE FLOWS</text>
+
+          <line class="dgm-line" x1="720" y1="81" x2="751" y2="81"></line>
+          <polygon class="dgm-head" points="751,76.5 760,81 751,85.5"></polygon>
+
+          <rect class="dgm-box" x="760" y="50" width="210" height="62"></rect>
+          <text class="dgm-t" x="865" y="78" text-anchor="middle">INFLUXDB</text>
+          <text class="dgm-s" x="865" y="97" text-anchor="middle">TIME SERIES</text>
+
+          <line class="dgm-line" x1="970" y1="81" x2="1001" y2="81"></line>
+          <polygon class="dgm-head" points="1001,76.5 1010,81 1001,85.5"></polygon>
+
+          <rect class="dgm-box dgm-box-key" x="1010" y="50" width="210" height="62"></rect>
+          <text class="dgm-t dgm-t-key" x="1115" y="78" text-anchor="middle">FASTAPI</text>
+          <text class="dgm-s" x="1115" y="97" text-anchor="middle">ANALYTICS SIDECAR</text>
+        </svg>
+      </div>
+      <figcaption class="figure-caption">FIGURE 01 &middot; SENSOR TO ANALYTICS PATH. DEPLOYED AS A PILOT AT A DAIRY PLANT.</figcaption>
+    </figure>
+
+    <p>Five analytics layers ran on top of that:</p>
+    <ol class="layer-list">
+      <li><span class="layer-num">01</span><span>ISO 20816-3 zone classification</span></li>
+      <li><span class="layer-num">02</span><span>Streaming Welford z-score baselines</span></li>
+      <li><span class="layer-num">03</span><span>Isolation Forest anomaly detection</span></li>
+      <li><span class="layer-num">04</span><span>Trend regression</span></li>
+      <li><span class="layer-num">05</span><span>Bearing fault root-cause analysis</span></li>
+    </ol>
+    <p class="layer-note">A REGISTRY KEYED BY SENSOR MAC ADDRESS RESOLVED PER-MACHINE THRESHOLDS IN THREE TIERS.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Why It Died</h2>
+    </div>
+    <ul class="principles">
+      <li>Small plants did not care enough to pay.</li>
+      <li>Large plants stayed with incumbent vendors.</li>
+      <li>Nobody hands their maintenance program to a founder with no plant-floor experience.</li>
+    </ul>
+    <p class="mt">I pivoted to selling the analysis engine directly to analysts, which became <a class="inline-link" href="phasedraft.html">Phasedraft</a>.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">What I Took From It</h2>
+    </div>
+    <p>The credibility gap was the product problem, not the code. Domain trust cannot be engineered after the fact.</p>
+    <p class="case-more"><a href="phasedraft.html">Read the Phasedraft case study</a></p>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="title-block">
+      <div class="tb-cell"><span class="tb-label">Name</span><span class="tb-value">SWAN YAE HTET</span></div>
+      <div class="tb-cell"><span class="tb-label">Location</span><span class="tb-value">VANCOUVER BC</span></div>
+      <div class="tb-cell"><span class="tb-label">Languages</span><span class="tb-value">ENGLISH &middot; BURMESE</span></div>
+      <div class="tb-cell"><span class="tb-label">Year</span><span class="tb-value">2026</span></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

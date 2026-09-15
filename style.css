@@ -1,0 +1,591 @@
+/* ---------------------------------------------------------------
+   jasonkhaings.com
+   Static site. No build step, no JavaScript, no trackers.
+   --------------------------------------------------------------- */
+
+:root {
+  --paper: #fdfdfb;
+  --ink: #1c1c1c;
+  --amber: #b45309;
+  --rule: #d6d3cd;
+  --muted: #6b6862;
+
+  --serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --measure: 62rem;
+  --prose: 44rem;
+  --gutter: 1.75rem;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.62;
+  overflow-wrap: break-word;
+}
+
+::selection { background: #f3e2cf; }
+
+p { margin: 0 0 1.05rem; max-width: var(--prose); }
+p:last-child { margin-bottom: 0; }
+
+a { color: inherit; text-decoration: none; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* --- mono utility type ---------------------------------------- */
+
+.topline,
+.topline-nav,
+.masthead-nav a,
+.section-num,
+.section-title,
+.page-meta,
+.case-meta,
+.case-more,
+.contact-label,
+.spectrum-caption,
+.tb-label,
+.tb-value {
+  font-family: var(--mono);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+/* --- header ---------------------------------------------------- */
+
+.site-header { padding-top: 1.4rem; }
+
+.topline-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.5rem;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: .7rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.topline {
+  margin: 0;
+  max-width: none;
+  font-size: .68rem;
+  letter-spacing: .14em;
+  color: var(--muted);
+}
+
+.topline-nav { margin: 0; max-width: none; font-size: .68rem; letter-spacing: .14em; }
+.topline-nav a { color: var(--muted); border-bottom: 1px solid transparent; }
+.topline-nav a:hover { color: var(--amber); border-bottom-color: var(--amber); }
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-block: 2.1rem 1.6rem;
+}
+
+.name {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 5.6vw, 3.45rem);
+  line-height: 1.04;
+  letter-spacing: .005em;
+  margin: 0;
+}
+
+.goes-by {
+  margin: .5rem 0 0;
+  max-width: none;
+  font-family: var(--mono);
+  font-size: .76rem;
+  letter-spacing: .1em;
+  color: var(--amber);
+}
+
+.masthead-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem 1.35rem;
+  text-align: right;
+}
+
+.masthead-nav a {
+  font-size: .71rem;
+  letter-spacing: .13em;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 2px;
+}
+
+.masthead-nav a:hover { color: var(--amber); border-bottom-color: var(--amber); }
+
+/* --- spectrum strip -------------------------------------------- */
+
+.spectrum { border-block: 1px solid var(--rule); padding-block: 1.1rem .85rem; }
+
+.spectrum-svg { display: block; width: 100%; height: auto; }
+
+.spec-trace {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.spec-baseline {
+  stroke: var(--rule);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.spec-cursor {
+  stroke: var(--amber);
+  stroke-width: 1;
+  stroke-opacity: .38;
+  vector-effect: non-scaling-stroke;
+}
+
+.spec-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .06em;
+  fill: var(--amber);
+}
+
+.spectrum-caption {
+  margin: .7rem 0 0;
+  max-width: none;
+  font-size: .63rem;
+  letter-spacing: .15em;
+  color: var(--muted);
+}
+
+/* --- sections --------------------------------------------------- */
+
+main { padding-bottom: 3.5rem; }
+
+.intro { padding-block: 2.6rem 0; }
+.intro p { font-size: 1.06rem; }
+
+.section { padding-block: 2.7rem 0; }
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1.1rem;
+  padding-top: .85rem;
+  margin-bottom: 1.6rem;
+  border-top: 1px solid var(--rule);
+}
+
+.section-num {
+  font-size: .78rem;
+  letter-spacing: .1em;
+  color: var(--amber);
+  flex: none;
+}
+
+.section-title {
+  margin: 0;
+  font-size: .8rem;
+  font-weight: 500;
+  letter-spacing: .2em;
+}
+
+/* --- work / case entries ---------------------------------------- */
+
+.case { padding-block: 1.5rem; border-bottom: 1px solid var(--rule); }
+.case:first-child { padding-top: 0; }
+.case:last-child { border-bottom: 0; padding-bottom: .5rem; }
+
+.case-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(1.45rem, 3.2vw, 1.85rem);
+  line-height: 1.2;
+  margin: 0 0 .5rem;
+}
+
+.case-title a { border-bottom: 1px solid var(--rule); padding-bottom: 1px; }
+.case-title a:hover { color: var(--amber); border-bottom-color: var(--amber); }
+
+.case-desc { margin-bottom: .75rem; color: var(--ink); }
+
+.case-meta,
+.page-meta {
+  margin: 0 0 .9rem;
+  max-width: none;
+  font-size: .68rem;
+  letter-spacing: .12em;
+  color: var(--muted);
+}
+
+.status { color: var(--amber); font-weight: 500; }
+
+.case-more {
+  margin: .1rem 0 0;
+  max-width: none;
+  font-size: .68rem;
+  letter-spacing: .13em;
+}
+
+.case-more a { color: var(--amber); border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+.case-more a:hover { border-bottom-color: var(--amber); }
+
+/* --- lists ------------------------------------------------------ */
+
+.principles, .receipts, .contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: var(--prose);
+}
+
+.principles li, .receipts li {
+  position: relative;
+  padding-left: 1.6rem;
+  margin-bottom: 1.05rem;
+}
+
+.principles li::before, .receipts li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .72em;
+  width: .7rem;
+  height: 1px;
+  background: var(--amber);
+}
+
+.principles li:last-child, .receipts li:last-child { margin-bottom: 0; }
+
+.contact-list { max-width: none; }
+
+.contact-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem 1.2rem;
+  padding-block: .6rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.contact-list li:last-child { border-bottom: 0; }
+
+.contact-label {
+  flex: none;
+  width: 7rem;
+  font-size: .68rem;
+  letter-spacing: .12em;
+  color: var(--muted);
+  padding-top: .18em;
+}
+
+.contact-list a {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1px;
+  overflow-wrap: anywhere;
+}
+
+.contact-list a:hover { color: var(--amber); border-bottom-color: var(--amber); }
+
+/* --- case study pages -------------------------------------------- */
+
+.page-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(1.95rem, 5vw, 2.85rem);
+  line-height: 1.1;
+  margin: 0 0 .7rem;
+}
+
+.case-head { padding-block: 2.2rem 1.8rem; border-bottom: 1px solid var(--rule); }
+.case-head .page-meta { margin-bottom: 0; }
+
+.section p + p { margin-top: 0; }
+
+/* --- footer ------------------------------------------------------- */
+
+.site-footer { border-top: 1px solid var(--rule); padding-block: 2.2rem 3rem; }
+
+.title-block {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--rule);
+}
+
+.tb-cell { padding: .85rem 1rem; border-left: 1px solid var(--rule); }
+.tb-cell:first-child { border-left: 0; }
+
+.tb-label {
+  display: block;
+  font-size: .6rem;
+  letter-spacing: .16em;
+  color: var(--muted);
+  margin-bottom: .35rem;
+}
+
+.tb-value {
+  display: block;
+  font-size: .75rem;
+  letter-spacing: .07em;
+  color: var(--ink);
+}
+
+/* --- 404 ---------------------------------------------------------- */
+
+.page-404 {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.block-404 { padding-block: 4rem; }
+
+.code-404 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(3.2rem, 12vw, 5.5rem);
+  line-height: 1;
+  margin: 1.6rem 0 .9rem;
+}
+
+.text-404 {
+  font-family: var(--mono);
+  text-transform: uppercase;
+  font-size: .72rem;
+  letter-spacing: .16em;
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+
+.home-404 {
+  font-family: var(--mono);
+  text-transform: uppercase;
+  font-size: .72rem;
+  letter-spacing: .14em;
+}
+
+.home-404 a { color: var(--amber); border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+.home-404 a:hover { border-bottom-color: var(--amber); }
+
+/* --- narrow widths ------------------------------------------------- */
+
+@media (max-width: 640px) {
+  :root { --gutter: 1.15rem; }
+
+  body { font-size: 15.5px; }
+
+  .masthead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding-block: 1.7rem 1.35rem;
+  }
+
+  .masthead-nav { text-align: left; gap: .3rem 1.1rem; }
+
+  .spec-label { font-size: 26px; }
+
+  .section-head { gap: .85rem; }
+
+  .contact-label { width: 100%; padding-top: 0; }
+
+  .title-block { grid-template-columns: 1fr; }
+  .tb-cell { border-left: 0; border-top: 1px solid var(--rule); }
+  .tb-cell:first-child { border-top: 0; }
+}
+
+/* --- metadata links ------------------------------------------------ */
+
+.meta-link { color: var(--amber); border-bottom: 1px solid var(--rule); padding-bottom: 1px; }
+.meta-link:hover { border-bottom-color: var(--amber); }
+
+.case-stack {
+  font-family: var(--mono);
+  text-transform: uppercase;
+  font-size: .63rem;
+  letter-spacing: .12em;
+  color: var(--muted);
+  margin: 0 0 .85rem;
+  max-width: none;
+}
+
+/* --- figures -------------------------------------------------------- */
+
+.figure { margin: 1.7rem 0 1.9rem; max-width: none; }
+
+.figure-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  padding: 1.15rem 1.2rem;
+}
+
+.figure-svg { display: block; width: 100%; height: auto; min-width: 680px; }
+
+.figure-caption {
+  margin: .7rem 0 0;
+  max-width: none;
+  font-family: var(--mono);
+  text-transform: uppercase;
+  font-size: .62rem;
+  letter-spacing: .15em;
+  color: var(--muted);
+}
+
+/* diagram primitives */
+
+.dgm-box {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.dgm-box-key { stroke: var(--amber); }
+
+.dgm-t {
+  font-family: var(--mono);
+  fill: var(--ink);
+  font-size: 20px;
+  letter-spacing: .06em;
+}
+
+.dgm-s {
+  font-family: var(--mono);
+  fill: var(--muted);
+  font-size: 14px;
+  letter-spacing: .08em;
+}
+
+.dgm-t-key { fill: var(--amber); }
+
+.dgm-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.dgm-head { fill: var(--ink); stroke: none; }
+
+/* spectrum annotations */
+
+.ann-line { stroke: var(--muted); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.ann-line-key { stroke: var(--amber); stroke-width: 1; vector-effect: non-scaling-stroke; }
+
+.ann-t {
+  font-family: var(--mono);
+  fill: var(--muted);
+  font-size: 16px;
+  letter-spacing: .09em;
+}
+
+.ann-t-key { fill: var(--amber); font-size: 20px; }
+
+/* --- problem walkthroughs -------------------------------------------- */
+
+.wt { padding-block: 1.35rem; border-top: 1px solid var(--rule); }
+.wt:first-of-type { border-top: 0; padding-top: .25rem; }
+.wt:last-of-type { padding-bottom: .25rem; }
+
+.wt-title {
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  font-weight: 600;
+  margin: 0 0 .65rem;
+  max-width: none;
+}
+
+.wt-beats { margin: 0; }
+
+.wt-beat {
+  display: flex;
+  gap: 1.1rem;
+  align-items: baseline;
+  padding-block: .28rem;
+}
+
+.wt-beat dt {
+  flex: none;
+  width: 8.2rem;
+  font-family: var(--mono);
+  text-transform: uppercase;
+  font-size: .63rem;
+  letter-spacing: .14em;
+  color: var(--muted);
+}
+
+.wt-beat dd { margin: 0; }
+
+/* --- numbered layer list ---------------------------------------------- */
+
+.layer-list {
+  list-style: none;
+  margin: 1.4rem 0 0;
+  padding: 0;
+  max-width: none;
+  border-top: 1px solid var(--rule);
+}
+
+.layer-list li {
+  display: flex;
+  gap: 1.1rem;
+  align-items: baseline;
+  padding-block: .78rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.layer-num {
+  flex: none;
+  width: 2.1rem;
+  font-family: var(--mono);
+  font-size: .7rem;
+  letter-spacing: .1em;
+  color: var(--amber);
+}
+
+.layer-note {
+  margin: 1rem 0 0;
+  font-family: var(--mono);
+  text-transform: uppercase;
+  font-size: .63rem;
+  letter-spacing: .12em;
+  color: var(--muted);
+  max-width: none;
+}
+
+@media (max-width: 640px) {
+  .wt-beat { flex-direction: column; gap: .05rem; }
+  .wt-beat dt { width: auto; }
+  .figure-scroll { padding: .9rem .9rem; }
+}
+
+/* --- inline prose links and spacing ----------------------------------- */
+
+.inline-link { color: var(--ink); border-bottom: 1px solid var(--amber); padding-bottom: 1px; }
+.inline-link:hover { color: var(--amber); }
+
+.mt { margin-top: 1.15rem; }
