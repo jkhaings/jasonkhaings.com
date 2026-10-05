@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bas-assistant | Swan Yae Htet</title>
+<meta name="description" content="Case study: bas-assistant, a support assistant that answers product questions only from public documentation, cites the page, and declines when the documents do not cover it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="topline-row">
+      <p class="topline">JASON KHAINGS / CASE STUDY 03 / BAS-ASSISTANT / REV 2026-10</p>
+      <p class="topline-nav"><a href="index.html">&#8592; INDEX</a></p>
+    </div>
+    <div class="case-head">
+      <h1 class="page-title">bas-assistant</h1>
+      <p class="page-meta">SEP 2026 &ndash; OCT 2026 &middot; SOLE ENGINEER &middot; STATUS: <span class="status">LIVE</span> &middot; DEMO: <a class="meta-link" href="https://bas.jasonkhaings.com">bas.jasonkhaings.com</a> &middot; CODE: <a class="meta-link" href="https://github.com/jkhaings/bas-assistant">github.com/jkhaings/bas-assistant</a></p>
+      <p class="case-stack">INDEPENDENT DEMO BUILT ON DELTA CONTROLS' PUBLIC PRODUCT DOCUMENTATION. NOT AFFILIATED WITH DELTA CONTROLS.</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">What It Is</h2>
+    </div>
+    <p>A support assistant for the support and sales staff of a building-automation company: it answers product questions only from public documentation, shows the page each answer came from, and declines when the documents do not cover the question.</p>
+    <p class="case-more"><a href="https://bas.jasonkhaings.com">Try the live demo</a> &middot; <a href="https://github.com/jkhaings/bas-assistant">Read the code on GitHub</a></p>
+
+    <figure class="figure">
+      <div class="figure-scroll">
+        <img class="figure-img" src="bas-assistant-chat.png" width="1280" height="1083" alt="Screenshot of the bas-assistant chat page. A question about the Red5-PLUS-1180 base unit is answered in two sentences. Below the answer are two source cards marked page 1 and page 2, and a cost receipt listing three model calls that total $0.000349.">
+      </div>
+      <figcaption class="figure-caption">FIGURE 01 &middot; THE LIVE DEMO ANSWERING A PRODUCT QUESTION. THE TWO SOURCE CARDS LINK TO THE CITED PAGES, AND THE RECEIPT SHOWS WHAT THE ANSWER COST.</figcaption>
+    </figure>
+
+    <p>BAS stands for building automation system: the controls that run heating, cooling, and ventilation in large buildings. The questions are the ones a support desk gets about those products: specs, ordering, wiring, protocols, and compatibility.</p>
+    <p>The documents are Delta Controls' public catalog sheets and product pages. This is an independent demo built on that public documentation. It is not a Delta Controls product, and I am not affiliated with Delta Controls.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">The Problem</h2>
+    </div>
+    <p>A language model will answer a product question fluently whether or not it has the facts.</p>
+    <p>In support that is the dangerous case. A wrong input count or a wrong wiring detail that sounds right gets passed to a customer, and it is hard to catch because it reads like an answer.</p>
+    <p>I wanted the opposite trade: every answer points at the page it came from, and declining is the normal result when the documents are silent.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">How It Works</h2>
+    </div>
+    <p>The assistant never answers from memory. It searches the documents first, and the model may only write from what the search found.</p>
+    <p>Code decides whether there is enough evidence to answer, and code checks the answer before anyone sees it.</p>
+    <ol class="layer-list">
+      <li><span class="layer-num">01</span><span>Read the documents. 112 public documents (70 PDFs and 42 product pages) are split by page and then by heading, so every piece of text keeps its page number. Two of them are restricted to test access rules, so the public demo searches 110.</span></li>
+      <li><span class="layer-num">02</span><span>Clean the question. Names, emails, phone numbers, and addresses are removed before anything is stored or sent to a model. Attempts to change the assistant's instructions and off-topic questions are refused.</span></li>
+      <li><span class="layer-num">03</span><span>Search two ways. One search matches by meaning and one by keyword, both inside the same Postgres database. The two result lists are merged, and a small local model re-scores the top 20 against the question.</span></li>
+      <li><span class="layer-num">04</span><span>Decline if the evidence is weak. If the best match scores under a fixed threshold, the assistant says it could not find the answer, and the answer model is never called.</span></li>
+      <li><span class="layer-num">05</span><span>Answer from five sections. The answer model reads the five best sections and must name the ones it used. Simple questions go to a small model and complex ones to a larger one.</span></li>
+      <li><span class="layer-num">06</span><span>Check the answer in code. A citation the model was not given, a link that is not a source, or an image fails the check. The model gets one retry, then the assistant returns a fixed message instead of the answer.</span></li>
+      <li><span class="layer-num">07</span><span>Show the sources. The source cards are built from the stored text, not from what the model wrote. Each card shows the document and the page, and a link to a PDF opens it at that page.</span></li>
+    </ol>
+    <p class="mt">It runs as a set of Docker containers on one DigitalOcean droplet with two CPUs. LangGraph runs the steps above, Postgres with pgvector holds the documents, and Caddy serves it over HTTPS.</p>
+    <p class="case-stack">PYTHON + FASTAPI &middot; POSTGRESQL + PGVECTOR &middot; LANGGRAPH &middot; LITELLM PROXY (GPT-4O-MINI, CLAUDE SONNET 4.6) &middot; REDIS &middot; REACT + TYPESCRIPT &middot; PROMETHEUS + GRAFANA &middot; DOCKER COMPOSE + CADDY &middot; DIGITALOCEAN DROPLET</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">How I Know It Works</h2>
+    </div>
+    <p>I keep a set of 20 questions with the right answer written down ahead of time, and I measure the live site against it. These numbers are from one run against the live demo on September 27, 2026.</p>
+    <ul class="receipts">
+      <li>Fixed question set: 22 of 22 checks passed. Of those, 17 had to be answered citing the expected document and 5 had to be declined: 3 the documents do not cover and 2 about restricted documents. The 20 questions make 22 checks because those 2 are asked twice, once with access and once without.</li>
+      <li>A pass means the right decision and the right document. It does not check the page number or the wording, so the answers are also scored.</li>
+      <li>Answer quality on the 17 answered questions, scored by the open-source RAGAS library with a second model as judge: faithfulness 0.734, answer relevancy 0.903, context precision 0.825, context recall 1.000. Faithfulness is the share of an answer's claims that the retrieved text supports.</li>
+      <li>Weakest area: protocol questions score 0.111 on faithfulness. Sibling products share sections word for word, and the judge reads those sections without the product name that the answer model sees. Part of that number is a measurement problem and part is real.</li>
+      <li>Adversarial tests: 6 of 6 passed, including a direct attempt to override the instructions, instructions planted inside a document, and personal data in a question.</li>
+      <li>Lint, type checks, and unit tests run on every pull request. The evaluations call live models, so I run them by hand against the live site.</li>
+    </ul>
+    <p class="mt">These are small numbers and I treat them that way. The judge is a small model, each category has two or three questions, and the decline threshold was tuned on the same 22 checks. So 22 of 22 shows the system does what I designed it to do on questions I chose. It does not show how it does on questions I did not think of.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">What It Costs Per Question</h2>
+    </div>
+    <p>Every model call is logged with its usage and its cost in dollars, and the demo shows that receipt under each answer. These figures come from the same run.</p>
+    <ul class="receipts">
+      <li>A simple question, answered by the small model: $0.00031 median over 16 answers.</li>
+      <li>A complex question, answered by the larger model: $0.0089 median over 3 answers, which is just under one cent.</li>
+      <li>A declined question: $0.00007 to $0.00008, because the answer model is never called.</li>
+      <li>An identical question that was already answered: $0, served from a cache.</li>
+      <li>The whole evaluation run, answers and judging together: $0.053.</li>
+    </ul>
+    <p class="mt">The demo has a hard spending cap of $3 a day. When it is reached the assistant stops answering until midnight UTC, and the Budget dashboard in the demo shows where the money went.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2 class="section-title">What I Would Build Next</h2>
+    </div>
+    <ul class="principles">
+      <li>Fix the protocol answers. Sibling products have near-identical sections that crowd the five the model reads. Removing the duplicates is the next thing to try.</li>
+      <li>Make it faster. The median answer takes 6.0 seconds and 95% arrive within 9.5 seconds. The re-scoring step alone takes a median of 2.9 seconds on the server's two CPUs, and I have not load tested it.</li>
+      <li>Measure live answers. The scores above come from a fixed set. Sampling real answers for faithfulness is not built yet.</li>
+      <li>Widen and refresh the documents. The demo covers catalog sheets and product pages only, with no manuals, and re-indexing is a manual command that should run on a schedule.</li>
+      <li>Put it where the questions are asked. Slack is the first channel I would add.</li>
+    </ul>
+    <p class="case-more mt"><a href="phasedraft.html">Next case study: Phasedraft (vib-agent)</a></p>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="title-block">
+      <div class="tb-cell"><span class="tb-label">Name</span><span class="tb-value">SWAN YAE HTET</span></div>
+      <div class="tb-cell"><span class="tb-label">Location</span><span class="tb-value">VANCOUVER BC</span></div>
+      <div class="tb-cell"><span class="tb-label">Languages</span><span class="tb-value">ENGLISH &middot; BURMESE</span></div>
+      <div class="tb-cell"><span class="tb-label">Year</span><span class="tb-value">2026</span></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

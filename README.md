@@ -1,7 +1,7 @@
 # jasonkhaings.com
 
-Personal portfolio site for Swan Yae Htet, who goes by Jason. Four pages: an
-index, two project case studies, and a 404.
+Personal portfolio site for Swan Yae Htet, who goes by Jason. Five pages: an
+index, three project case studies, and a 404.
 
 Plain HTML and CSS with one inline SVG. No JavaScript, no analytics, no
 cookies, no trackers. The only external request is the IBM Plex webfont
@@ -14,6 +14,8 @@ No build step, no CI, deployed from branch via GitHub Pages.
 | Path | What it is |
 | --- | --- |
 | `index.html` | Landing page: intro, work, how I work, contact |
+| `bas-assistant.html` | Case study: bas-assistant |
+| `bas-assistant-chat.png` | Screenshot used on the bas-assistant case study |
 | `phasedraft.html` | Case study: Phasedraft (vib-agent) |
 | `khaings.html` | Case study: Khaings International PdM pilot |
 | `404.html` | Not-found page |

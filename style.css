@@ -443,7 +443,7 @@ main { padding-bottom: 3.5rem; }
   padding: 1.15rem 1.2rem;
 }
 
-.figure-svg { display: block; width: 100%; height: auto; min-width: 680px; }
+.figure-svg, .figure-img { display: block; width: 100%; height: auto; min-width: 680px; }
 
 .figure-caption {
   margin: .7rem 0 0;
